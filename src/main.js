@@ -1,0 +1,5 @@
+export { call} from './function/call'
+export {bind} from './function/bind'
+export {debounce} from './function/debounce'
+export {apply} from './function/apply'
+export {throttle} from './function/throttle'

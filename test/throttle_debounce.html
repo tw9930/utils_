@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数节流防抖</title>
+</head>
+<body>
+<button id="button"> throttle</button>
+<button id="button2"> debounce</button>
+<!--
+1. 事件频繁触发可能造成的问题?
+    1). 一些浏览器事件:window.onresize、window.mousemove等，触发的频率非常高，会造成浏览器性能问题
+    2). 如果向后台发送请求，频繁触发，对服务器造成不必要的压力
+2. 如何限制事件处理函数频繁调用
+    1). 函数节流
+    2). 函数防抖
+3. 函数节流(throttle)
+    1). 理解:
+        在函数需要频繁触发时: 函数执行一次后，只有大于设定的执行周期后才会执行第二次
+        适合多次事件按时间做平均分配触发
+    2). 场景：
+        窗口调整（resize）
+        页面滚动（scroll）
+        DOM 元素的拖拽功能实现（mousemove）
+        抢购疯狂点击（click）
+4. 函数防抖(debounce)
+    1). 理解:
+        在函数需要频繁触发时: 在规定时间内，只让最后一次生效，前面的不生效。
+        适合多次事件一次响应的情况
+    2). 场景：
+        输入框实时搜索联想（keyup/input）
+-->
+<!--<script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.12.0-amd/lodash.js"></script>-->
+<script>
+
+</script>
+<script type="text/javascript">
+<!-- 节流函数-->
+    function throttle (fn,time) {
+        //节流起始时间，不能是date.now，因为第一次需要执行一次
+        let nowTime = 0
+
+        return function ( event) { //event 事件对象
+            if (Date.now() - nowTime >= time){
+                nowTime = Date.now()
+               fn.call(this,event)
+            }
+        }
+    }
+ // 防抖函数
+    function debounce(fn,time) {
+        //返回处理后的函数
+        return function (event){
+            //判断上次回调是否存在，如果存在清除它
+            // if (fn.delay){ 这个会去找原型链上，效率比较慢
+            if (fn.hasOwnProperty('delay')){ // 这个不会去找原型链只会在自身上找
+                clearTimeout(fn.delay)
+            }
+          fn.delay = setTimeout(()=>{
+                fn.call(this,event)
+              delete fn.delay
+            },time)
+        }
+
+    }
+
+ let btn = document.getElementById('button')
+ let btn2 = document.getElementById('button2')
+ function Print () {
+     console.log(this)
+ }
+ btn.onclick=throttle(Print,500)
+ btn2.onclick=debounce(Print,500)
+
+
+
+
+
+
+</script>
+</body>
+</html>
